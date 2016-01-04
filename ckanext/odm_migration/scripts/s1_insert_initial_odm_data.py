@@ -20,7 +20,7 @@ ckanapiutils = ckanapi_utils.LocalCkanApi()
 
 config = dict()
 
-class S8_insert_intial_odm_data(object):
+class S1_insert_intial_odm_data(object):
 
   @classmethod
   def __init__(self):
