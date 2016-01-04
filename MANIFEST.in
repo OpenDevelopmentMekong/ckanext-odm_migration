@@ -1,0 +1,2 @@
+recursive-include ckanext/odm_migration/templates *
+recursive-include ckanext *.html

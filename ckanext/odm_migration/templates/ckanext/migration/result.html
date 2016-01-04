@@ -1,0 +1,27 @@
+{% extends "page.html" %}
+
+{% block breadcrumb_content %}
+  <li class="active">{{ 'Migration stats' }}</li>
+{% endblock %}
+
+{% block primary_content_inner %}
+
+  <h2>{{ _('Results') }}</h2>
+  {% if c.script_results %}
+    <p class="empty">{{ c.script_results }}</p>
+  {% endif %}
+
+{% endblock %}
+
+{% block secondary_content %}
+  <div class="module module-narrow module-shallow">
+    <h2 class="module-heading">
+      <i class="icon-info-sign"></i>
+      {{ _('Migration scripts') }}
+    </h2>
+    <div class="module-content">
+      {% trans %}<p>Admin stuff</p>{% endtrans %}
+      {{ h.link_to("Back", h.url_for(controller='ckanext.odm_migration.controller:MigrationController', action='run')) }}
+    </div>
+  </div>
+{% endblock %}
