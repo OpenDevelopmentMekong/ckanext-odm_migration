@@ -181,7 +181,7 @@ def _set_document_type_from_category(dataset_metadata, elem):
         document_type = law_type
 
   if document_type:
-    dataset_metadata['document_type'] = document_type
+    dataset_metadata['odm_document_type'] = document_type
 
   return dataset_metadata
 
