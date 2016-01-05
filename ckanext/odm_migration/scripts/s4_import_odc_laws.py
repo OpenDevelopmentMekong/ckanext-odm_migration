@@ -27,8 +27,8 @@ import traceback
 
 ckanapiutils = ckanapi_utils.LocalCkanApi()
 data = data_utils.RealDataApi()
-taxonomies = data.load_data_from_csv('data/taxonomy_map.csv')
-laws_type_map = data.load_data_from_csv('data/laws_type_map.csv')
+taxonomies = data.load_data_from_csv(os.path.join(os.path.dirname(__file__), 'data/taxonomy_map.csv'))
+laws_type_map = data.load_data_from_csv(os.path.join(os.path.dirname(__file__), 'data/laws_type_map.csv'))
 
 config = dict()
 
