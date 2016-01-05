@@ -38,7 +38,8 @@ class S5_delete_all_laws(object):
     try:
 
       params = {
-        'fq': '+type:laws_record'
+        'fq': '+type:laws_record',
+        'rows': 1000
       }
 
       orga_datasets = {}
