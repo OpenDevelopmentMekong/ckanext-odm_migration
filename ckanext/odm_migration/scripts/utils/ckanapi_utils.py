@@ -4,6 +4,9 @@
 '''
 import ckanapi
 import requests
+from pylons import config as ckan_config
+import ckan.lib.base as base
+context = base.c
 
 # Interface definition
 class ICkanApi:
@@ -218,9 +221,6 @@ class RealCkanApi (ICkanApi):
     self.ckan_auth = config.CKAN_APIKEY
     self.api = ckanapi.RemoteCKAN(self.ckan_url,apikey=self.ckan_auth)
 
-    #if config.DEBUG:
-      #requests.packages.urllib3.disable_warnings()
-
     return
 
   def search_packages(self,params):
@@ -407,7 +407,11 @@ class LocalCkanApi (ICkanApi):
 
   def create_resource_with_file_upload(self,params):
 
-    return requests.post(self.ckan_url + '/api/3/action/resource_create',verify=False,data=params,headers={"X-CKAN-API-Key": self.ckan_auth},files=[('upload', file(params["upload"]))])
+    ckan_url = ckan_config.get("ckan.site_url", "")
+    userobj = context.userobj
+    ckan_auth = userobj.apikey
+
+    return requests.post(ckan_url + 'api/3/action/resource_create',data=params,headers={"X-CKAN-API-Key": ckan_auth},files=[('upload', file(params["upload"]))])
 
   def create_tag(self,params):
 
