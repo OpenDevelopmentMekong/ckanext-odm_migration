@@ -8,6 +8,7 @@ import s1_insert_initial_odm_data
 import s2_import_taxonomy_tag_dictionaries
 import s3_import_taxonomy_term_translations
 import s4_import_odc_laws
+import s5_delete_all_laws
 import s10_migrate_to_multilingual
 import ckan.lib.helpers as h
 
@@ -43,6 +44,13 @@ class MigrationController(BaseController):
       elif ('import_odc_laws' in request.params):
 
         script = s4_import_odc_laws.S4_import_odc_laws()
+        c.script_results = script.run()
+
+        return p.toolkit.render('ckanext/migration/result.html')
+
+      elif ('delete_all_laws' in request.params):
+
+        script = s5_delete_all_laws.S5_delete_all_laws()
         c.script_results = script.run()
 
         return p.toolkit.render('ckanext/migration/result.html')
