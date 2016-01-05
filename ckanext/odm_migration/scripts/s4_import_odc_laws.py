@@ -131,17 +131,19 @@ def _add_extras_urls_as_resources(dataset_metadata, field_prefixes, ckanapi_util
 
                 try:
 
+                  existing_resource = False
                   for resource in dataset_metadata['resources']:
                     if resource['name'] == dataset_metadata['title']:
-                      continue
+                      existing_resource = True
 
-                  temp_file_path = script_utils._generate_temp_filename(script_utils._get_ext(field_value))
-                  script_utils._download_file(field_value, temp_file_path)
-                  resource_dict = script_utils._create_metadata_dictionary_for_upload(dataset_metadata['id'], '',temp_file_path, dataset_metadata['title'], field_prefix['lang'].upper(), script_utils._get_ext(field_value),field_prefix['lang'])
-                  created_resource = ckanapiutils.create_resource_with_file_upload(resource_dict)
+                  if existing_resource == False:
+                    temp_file_path = script_utils._generate_temp_filename(script_utils._get_ext(field_value))
+                    script_utils._download_file(field_value, temp_file_path)
+                    resource_dict = script_utils._create_metadata_dictionary_for_upload(dataset_metadata['id'], '',temp_file_path, dataset_metadata['title'], field_prefix['lang'].upper(), script_utils._get_ext(field_value),field_prefix['lang'])
+                    created_resource = ckanapiutils.create_resource_with_file_upload(resource_dict)
 
-                  if os.path.exists(temp_file_path):
-                    os.remove(temp_file_path)
+                    if os.path.exists(temp_file_path):
+                      os.remove(temp_file_path)
 
                 except (UnicodeError):
                   traceback.print_exc()
