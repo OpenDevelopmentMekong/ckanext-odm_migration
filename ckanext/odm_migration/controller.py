@@ -15,10 +15,16 @@ import ckan.lib.helpers as h
 c = base.c
 request = base.request
 _ = base._
+abort = base.abort
 
 class MigrationController(BaseController):
 
     def run(self):
+
+      user_is_sysadmin = h.check_access('sysadmin')
+
+      if not user_is_sysadmin:
+        abort(401, _('Unauthorized to access migration scripts'))
 
       if ('insert_initial_odm_data' in request.params):
 
