@@ -90,28 +90,27 @@ def _convert_field_to_multilingual(field,dataset):
   print("_convert_field_to_multilingual " + field)
 
   if field in dataset:
-    print("1")
-    value = dataset[field]
-    print("2")
-    print(value)
+
+    value = dataset[field].encode('utf8')
+
     if type(value) is dict:
       print(str(field) + " is already multilingual ")
       return dataset
-    print("3")
+
     field_dict = {
       'en': "",
       'km': "",
       'vi': "",
       'th': ""
     }
-    print("4")
+
     lang = 'en'
     if _is_khmer(value):
       lang = 'km'
-    print("5")
+
     field_dict[lang] = value
     dataset[field] = json.dumps(field_dict)
-    print(dataset[field])
+
   return dataset
 
 def _convert_odm_spatial_range(dataset):
