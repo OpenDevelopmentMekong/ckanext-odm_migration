@@ -13,6 +13,7 @@ import ckanapi_utils
 import traceback
 import json
 import ckan.model as model
+import traceback
 
 ckanapiutils = ckanapi_utils.LocalCkanApi()
 
@@ -29,10 +30,11 @@ def _get_all_dataset_ids():
 
 def _is_khmer(value):
   try:
-    value.decode(encoding='ascii',errors='strict')
-    return False
-  except:
+    value.decode('ascii')
+  except UnicodeDecodeError:
     return True
+  else:
+    return False
 
 def _copy_notes(dataset):
 
@@ -42,7 +44,7 @@ def _copy_notes(dataset):
 
   value = dataset['notes']
 
-  dataset['notes_translated'] = {
+  notes_dict = {
     'en': "",
     'km': "",
     'vi': "",
@@ -54,7 +56,8 @@ def _copy_notes(dataset):
     print('is khmer' + str(value))
     lang = 'km'
 
-  dataset['notes_translated'][lang] = value
+  notes_dict[lang] = value
+  dataset['notes_translated'] = json.dumps(notes_dict)
 
   return dataset
 
@@ -66,7 +69,7 @@ def _copy_title(dataset):
 
   value = dataset['title']
 
-  dataset['title_translated'] = {
+  title_dict = {
     'en': "",
     'km': "",
     'vi': "",
@@ -78,7 +81,8 @@ def _copy_title(dataset):
     print('is khmer ' + str(value))
     lang = 'km'
 
-  dataset['title_translated'][lang] = value
+  title_dict[lang] = value
+  dataset['title_translated'] = json.dumps(title_dict)
 
   return dataset
 
@@ -89,10 +93,10 @@ def _convert_field_to_multilingual(field,dataset):
     value = dataset[field]
 
     if type(value) is dict:
-      print(str(field) + 'is already multilingual ' + str(value))
+      print(str(field) + ' is already multilingual ' + str(value))
       return dataset
 
-    dataset[field] = {
+    field_dict = {
       'en': "",
       'km': "",
       'vi': "",
@@ -103,7 +107,8 @@ def _convert_field_to_multilingual(field,dataset):
     if _is_khmer(value):
       lang = 'km'
 
-    dataset[field][lang] = value
+    field_dict[lang] = value
+    dataset[field] = json.dumps(field_dict)
 
   return dataset
 
@@ -211,7 +216,6 @@ class S6_migrate_to_multilingual(object):
   def run(self):
 
     print("S6_migrate_to_multilingual run")
-
     # True == 1
     # False == 0
     updated_datasets = []
@@ -226,6 +230,7 @@ class S6_migrate_to_multilingual(object):
         print('type dataset')
         dataset = _convert_field_to_multilingual('odm_access_and_use_constraints',dataset)
         dataset = _convert_field_to_multilingual('odm_accuracy',dataset)
+        dataset = _convert_field_to_multilingual('odm_contact',dataset)
         dataset = _convert_field_to_multilingual('odm_logical_consistency',dataset)
         dataset = _convert_field_to_multilingual('odm_completeness',dataset)
         dataset = _convert_field_to_multilingual('odm_metadata_reference_information',dataset)
