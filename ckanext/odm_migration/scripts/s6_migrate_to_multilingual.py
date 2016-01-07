@@ -28,7 +28,7 @@ def _get_all_dataset_ids():
   return res_pkgs
 
 def _is_khmer(value):
-  print("checking if value is in khmer " + value)
+  print("checking if value is in khmer " + str(value))
   try:
     value.decode('ascii')
   except UnicodeDecodeError:
