@@ -252,7 +252,7 @@ class S6_migrate_to_multilingual(object):
 
     for dataset_id in all_dataset_ids:
       dataset = ckanapiutils.get_package_contents(dataset_id)
-      if dataset['odm_multilingual'] == 1:
+      if 'odm_multilingual' in dataset and dataset['odm_multilingual'] == 1:
         print('Skipping dataset: '+ dataset_id)
         continue
 
