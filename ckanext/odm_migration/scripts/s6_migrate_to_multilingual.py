@@ -42,7 +42,7 @@ def _copy_notes(dataset):
     print('notes_translated already present ' + str(dataset['notes_translated']))
     return dataset
 
-  value = dataset['notes']
+  value = dataset['notes'].encode('utf-8')
 
   notes_dict = {
     'en': "",
@@ -67,7 +67,7 @@ def _copy_title(dataset):
     print('title_translated already present ' + str(dataset['title_translated']))
     return dataset
 
-  value = dataset['title']
+  value = dataset['title'].encode('utf-8')
 
   title_dict = {
     'en': "",
@@ -91,7 +91,7 @@ def _convert_field_to_multilingual(field,dataset):
 
   if field in dataset:
 
-    value = dataset[field].encode('utf8')
+    value = dataset[field].encode('utf-8')
 
     if type(value) is dict:
       print(str(field) + " is already multilingual ")
