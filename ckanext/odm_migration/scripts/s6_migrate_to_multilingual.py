@@ -29,6 +29,7 @@ def _get_all_dataset_ids():
   return res_pkgs
 
 def _is_khmer(value):
+  print("checking if value is in khmer" + value)
   try:
     value.decode('ascii')
   except UnicodeDecodeError:
@@ -87,6 +88,7 @@ def _copy_title(dataset):
   return dataset
 
 def _convert_field_to_multilingual(field,dataset):
+  print("_convert_field_to_multilingual" + field)
 
   if field in dataset:
 
