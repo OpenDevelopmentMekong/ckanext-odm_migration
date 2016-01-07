@@ -13,6 +13,7 @@ import ckanapi_utils
 import json
 import ckan.model as model
 import traceback
+import ckan
 
 ckanapiutils = ckanapi_utils.LocalCkanApi()
 
