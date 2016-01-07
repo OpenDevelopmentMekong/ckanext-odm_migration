@@ -75,7 +75,7 @@ def _copy_title(dataset):
 
   lang = 'en'
   if _is_khmer(value):
-    print('is khmer' + str(value))
+    print('is khmer ' + str(value))
     lang = 'km'
 
   dataset['title_translated'][lang] = value
@@ -212,9 +212,6 @@ class S6_migrate_to_multilingual(object):
 
     print("S6_migrate_to_multilingual run")
 
-    print(_is_khmer("អនុ​ក្រឹត្យ​ស្តី​ពី​នីតិវិធី"))
-    print(_is_khmer("bla bla bla!"))
-    return (_is_khmer("អនុ​ក្រឹត្យ​ស្តី​ពី​នីតិវិធី"))
     # True == 1
     # False == 0
     updated_datasets = []
