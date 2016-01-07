@@ -28,14 +28,20 @@ def _get_all_dataset_ids():
   res_pkgs = [pkg_id[0] for pkg_id in res_ids]
   return res_pkgs
 
-def _is_khmer(value):
-  print("checking if value is in khmer " + str(value))
-  try:
-    value.decode('ascii')
-  except UnicodeDecodeError:
-    return True
-  else:
-    return False
+# def _is_khmer(value):
+#   print("checking if value is in khmer " + str(value))
+#   try:
+#     value.decode('ascii')
+#   except UnicodeDecodeError:
+#     return True
+#   else:
+#     return False
+
+def _is_english(value):
+  for c in set(['a', 'e', 'i', 'o', 'u']):
+      if c in str: return True;
+  return False;
+
 
 def _copy_notes(dataset):
 
@@ -61,10 +67,10 @@ def _copy_notes(dataset):
     'th': ""
   }
 
-  lang = 'en'
-  if _is_khmer(value):
-    print('is khmer' + str(value))
-    lang = 'km'
+  lang = 'km'
+  if _is_english(value):
+    print('_is_english' + str(value))
+    lang = 'en'
 
   notes_dict[lang] = value
   dataset['notes_translated'] = json.dumps(notes_dict)
@@ -95,10 +101,10 @@ def _copy_title(dataset):
     'th': ""
   }
 
-  lang = 'en'
-  if _is_khmer(value):
-    print('is khmer ' + str(value))
-    lang = 'km'
+  lang = 'km'
+  if _is_english(value):
+    print('is english ' + str(value))
+    lang = 'en'
 
   title_dict[lang] = value
   dataset['title_translated'] = json.dumps(title_dict)
@@ -125,9 +131,9 @@ def _convert_field_to_multilingual(field,dataset):
       'th': ""
     }
 
-    lang = 'en'
-    if _is_khmer(value):
-      lang = 'km'
+    lang = 'km'
+    if _is_english(value):
+      lang = 'en'
 
     field_dict[lang] = value
     dataset[field] = json.dumps(field_dict)
@@ -246,6 +252,10 @@ class S6_migrate_to_multilingual(object):
 
     for dataset_id in all_dataset_ids:
       dataset = ckanapiutils.get_package_contents(dataset_id)
+      if dataset['odm_multilingual'] == 1:
+        print('Skipping dataset: '+ dataset_id)
+        continue
+
       print('Converting '+ dataset_id)
 
       try:
