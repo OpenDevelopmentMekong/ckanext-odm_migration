@@ -11,7 +11,6 @@ import s4_import_odc_laws
 import s5_delete_all_laws
 import s6_migrate_to_multilingual
 import s7_reset_multilingual_flag
-import s10_migrate_to_multilingual
 import ckan.lib.helpers as h
 
 c = base.c
