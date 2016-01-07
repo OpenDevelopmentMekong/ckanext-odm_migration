@@ -87,7 +87,7 @@ def _copy_title(dataset):
   return dataset
 
 def _convert_field_to_multilingual(field,dataset):
-  print("_convert_field_to_multilingual" + field)
+  print("_convert_field_to_multilingual " + field)
 
   if field in dataset:
 
@@ -254,12 +254,12 @@ class S6_migrate_to_multilingual(object):
         dataset = _copy_title(dataset)
         dataset = _copy_notes(dataset)
 
+        if config['dry'] == False:
+          dataset['odm_multilingual'] = 1
+          ckanapiutils.update_package(dataset)
+          updated_datasets.append(dataset['id'])
+
       except UnicodeDecodeError:
         traceback.print_exc()
-
-      if config['dry'] == False:
-        dataset['odm_multilingual'] = 1
-        ckanapiutils.update_package(dataset)
-        updated_datasets.append(dataset['id'])
 
     return updated_datasets
