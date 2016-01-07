@@ -42,19 +42,20 @@ def _copy_notes(dataset):
     print('notes_translated already present ' + str(dataset['notes_translated']))
     return dataset
 
-  value = dataset['notes'].encode('utf-8')
+  if 'notes' in dataset:
+    value = dataset['notes'].encode('utf-8')
 
-  notes_dict = {
-    'en': "",
-    'km': "",
-    'vi': "",
-    'th': ""
-  }
+    notes_dict = {
+      'en': "",
+      'km': "",
+      'vi': "",
+      'th': ""
+    }
 
-  lang = 'en'
-  if _is_khmer(value):
-    print('is khmer' + str(value))
-    lang = 'km'
+    lang = 'en'
+    if _is_khmer(value):
+      print('is khmer' + str(value))
+      lang = 'km'
 
   notes_dict[lang] = value
   dataset['notes_translated'] = json.dumps(notes_dict)
@@ -67,22 +68,23 @@ def _copy_title(dataset):
     print('title_translated already present ' + str(dataset['title_translated']))
     return dataset
 
-  value = dataset['title'].encode('utf-8')
+  if 'title' in dataset:
+    value = dataset['title'].encode('utf-8')
 
-  title_dict = {
-    'en': "",
-    'km': "",
-    'vi': "",
-    'th': ""
-  }
+    title_dict = {
+      'en': "",
+      'km': "",
+      'vi': "",
+      'th': ""
+    }
 
-  lang = 'en'
-  if _is_khmer(value):
-    print('is khmer ' + str(value))
-    lang = 'km'
+    lang = 'en'
+    if _is_khmer(value):
+      print('is khmer ' + str(value))
+      lang = 'km'
 
-  title_dict[lang] = value
-  dataset['title_translated'] = json.dumps(title_dict)
+    title_dict[lang] = value
+    dataset['title_translated'] = json.dumps(title_dict)
 
   return dataset
 
