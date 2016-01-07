@@ -93,11 +93,13 @@ def _convert_field_to_multilingual(field,dataset):
 
   if field in dataset:
 
-    value = dataset[field].encode('utf-8')
+    value = dataset[field]
 
     if type(value) is dict:
       print(str(field) + " is already multilingual ")
       return dataset
+
+    value = value.encode('utf-8')
 
     field_dict = {
       'en': "",
