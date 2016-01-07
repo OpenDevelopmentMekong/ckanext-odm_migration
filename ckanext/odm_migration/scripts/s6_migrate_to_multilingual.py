@@ -29,7 +29,7 @@ def _get_all_dataset_ids():
 
 def _is_khmer(value):
   try:
-    value.decode(encoding='UTF-8',errors='strict')
+    value.decode(encoding='ascii',errors='strict')
     return False
   except:
     return True
@@ -107,6 +107,96 @@ def _convert_field_to_multilingual(field,dataset):
 
   return dataset
 
+def _convert_odm_spatial_range(dataset):
+
+  if 'odm_spatial_range' in dataset:
+    if type(dataset['odm_spatial_range']) is list:
+      return dataset
+
+    odm_spatial_range = []
+
+    if dataset['odm_spatial_range'].lower().find('laos') > -1:
+      odm_spatial_range.append('la')
+    if dataset['odm_spatial_range'].lower().find('vietnam') > -1:
+      odm_spatial_range.append('vn')
+    if dataset['odm_spatial_range'].lower().find('thailand') > -1:
+      odm_spatial_range.append('th')
+    if dataset['odm_spatial_range'].lower().find('myanmar') > -1:
+      odm_spatial_range.append('mm')
+    if dataset['odm_spatial_range'].lower().find('cambodia') > -1:
+      odm_spatial_range.append('kh')
+    if dataset['odm_spatial_range'].lower().find('global') > -1:
+      odm_spatial_range.append('global')
+    if dataset['odm_spatial_range'].lower().find('asean') > -1:
+      odm_spatial_range.append('asean')
+    if dataset['odm_spatial_range'].lower().find('greater mekong subregion (gms)') > -1:
+      odm_spatial_range.append('gms')
+    if dataset['odm_spatial_range'].lower().find('lower mekong basin') > -1:
+      odm_spatial_range.append('lmb')
+    if dataset['odm_spatial_range'].lower().find('lower mekong countries') > -1:
+      odm_spatial_range.append('lmc')
+
+    dataset['odm_spatial_range'] = odm_spatial_range
+    print("Setting odm_spatial_range " + str(odm_spatial_range))
+
+  return dataset
+
+def _convert_odm_language(dataset):
+
+  if 'odm_language' in dataset:
+    if type(dataset['odm_language']) is list:
+      return dataset
+
+    odm_language = []
+
+    if dataset['odm_language'].lower().find('vi') > -1:
+      odm_language.append('vi')
+    if dataset['odm_language'].lower().find('vietnamese') > -1:
+      odm_language.append('vi')
+    if dataset['odm_language'].lower().find('en') > -1:
+      odm_language.append('en')
+    if dataset['odm_language'].lower().find('english') > -1:
+      odm_language.append('en')
+    if dataset['odm_language'].lower().find('lo') > -1:
+      odm_language.append('lo')
+    if dataset['odm_language'].lower().find('lao') > -1:
+      odm_language.append('lo')
+    if dataset['odm_language'].lower().find('th') > -1:
+      odm_language.append('th')
+    if dataset['odm_language'].lower().find('thai') > -1:
+      odm_language.append('th')
+    if dataset['odm_language'].lower().find('my') > -1:
+      odm_language.append('my')
+    if dataset['odm_language'].lower().find('burmese') > -1:
+      odm_language.append('my')
+    if dataset['odm_language'].lower().find('zh') > -1:
+      odm_language.append('zh')
+    if dataset['odm_language'].lower().find('chinese') > -1:
+      odm_language.append('zh')
+    if dataset['odm_language'].lower().find('fr') > -1:
+      odm_language.append('fr')
+    if dataset['odm_language'].lower().find('french') > -1:
+      odm_language.append('fr')
+    if dataset['odm_language'].lower().find('de') > -1:
+      odm_language.append('de')
+    if dataset['odm_language'].lower().find('german') > -1:
+      odm_language.append('de')
+    if dataset['odm_language'].lower().find('jp') > -1:
+      odm_language.append('jp')
+    if dataset['odm_language'].lower().find('japanese') > -1:
+      odm_language.append('jp')
+    if dataset['odm_language'].lower().find('ko') > -1:
+      odm_language.append('ko')
+    if dataset['odm_language'].lower().find('korean') > -1:
+      odm_language.append('ko')
+    if dataset['odm_language'].lower().find('other') > -1:
+      odm_language.append('other')
+
+    dataset['odm_language'] = odm_language
+    print("Setting odm_language " + str(odm_language))
+
+  return dataset
+
 class S6_migrate_to_multilingual(object):
 
   @classmethod
@@ -120,8 +210,11 @@ class S6_migrate_to_multilingual(object):
   @classmethod
   def run(self):
 
-    print("S6_migrate_to_multilingual run (DATASETS)")
+    print("S6_migrate_to_multilingual run")
 
+    print(_is_khmer("អនុ​ក្រឹត្យ​ស្តី​ពី​នីតិវិធី"))
+    print(_is_khmer("bla bla bla!"))
+    return (_is_khmer("អនុ​ក្រឹត្យ​ស្តី​ពី​នីតិវិធី"))
     # True == 1
     # False == 0
     updated_datasets = []
@@ -151,6 +244,8 @@ class S6_migrate_to_multilingual(object):
         dataset = _convert_field_to_multilingual('marc21_300',dataset)
         dataset = _convert_field_to_multilingual('marc21_500',dataset)
 
+      dataset = _convert_odm_spatial_range(dataset)
+      dataset = _convert_odm_language(dataset)
       dataset = _copy_title(dataset)
       dataset = _copy_notes(dataset)
 
