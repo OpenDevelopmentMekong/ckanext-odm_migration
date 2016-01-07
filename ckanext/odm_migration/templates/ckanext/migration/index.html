@@ -46,16 +46,6 @@
     </button>
   </form>
 
-  <form method="POST" id="s10_migrate_to_arrays">
-    <button
-      type="submit"
-      name="migrate_to_arrays"
-      value="migrate_to_arrays"
-      class="btn btn-info">
-      {% trans %}Migrate to arrays{% endtrans %}
-    </button>
-  </form>
-
   <form method="POST" id="s5_delete_all_laws">
     <button
       type="submit"
@@ -63,6 +53,26 @@
       value="delete_all_laws"
       class="btn btn-danger">
       {% trans %}DANGER! Delete all laws{% endtrans %}
+    </button>
+  </form>
+
+  <form method="POST" id="s6_migrate_to_multilingual">
+    <button
+      type="submit"
+      name="migrate_to_multilingual"
+      value="migrate_to_multilingual"
+      class="btn btn-danger">
+      {% trans %}DANGER! Migrate to multilingual{% endtrans %}
+    </button>
+  </form>
+
+  <form method="POST" id="s7_reset_multilingual_flag">
+    <button
+      type="submit"
+      name="reset_multilingual_flag"
+      value="reset_multilingual_flag"
+      class="btn btn-danger">
+      {% trans %}DANGER! Reset multilingual flag{% endtrans %}
     </button>
   </form>
 

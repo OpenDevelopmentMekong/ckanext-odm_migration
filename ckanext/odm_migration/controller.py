@@ -9,6 +9,8 @@ import s2_import_taxonomy_tag_dictionaries
 import s3_import_taxonomy_term_translations
 import s4_import_odc_laws
 import s5_delete_all_laws
+import s6_migrate_to_multilingual
+import s7_reset_multilingual_flag
 import s10_migrate_to_multilingual
 import ckan.lib.helpers as h
 
@@ -61,9 +63,16 @@ class MigrationController(BaseController):
 
         return p.toolkit.render('ckanext/migration/result.html')
 
-      elif ('migrate_to_arrays' in request.params):
+      elif ('migrate_to_multilingual' in request.params):
 
-        script = s10_migrate_to_multilingual.S10_migrate_to_multilingual()
+        script = s6_migrate_to_multilingual.S6_migrate_to_multilingual()
+        c.script_results = script.run()
+
+        return p.toolkit.render('ckanext/migration/result.html')
+
+      elif ('reset_multilingual_flag' in request.params):
+
+        script = s7_reset_multilingual_flag.S7_reset_multilingual_flag()
         c.script_results = script.run()
 
         return p.toolkit.render('ckanext/migration/result.html')
