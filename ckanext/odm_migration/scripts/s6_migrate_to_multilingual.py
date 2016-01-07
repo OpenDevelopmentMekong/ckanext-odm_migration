@@ -252,47 +252,48 @@ class S6_migrate_to_multilingual(object):
 
     for dataset_id in all_dataset_ids:
       dataset = ckanapiutils.get_package_contents(dataset_id)
-      if 'odm_multilingual' in dataset and dataset['odm_multilingual'] == 1:
-        print('Skipping dataset: '+ dataset_id)
-        continue
+      if 'odm_multilingual' not in dataset or ('odm_multilingual' in dataset and dataset['odm_multilingual'] == 0):
+        print('Converting '+ dataset_id)
 
-      print('Converting '+ dataset_id)
+        try:
 
-      try:
+          if dataset['type'] == 'dataset':
+            print('type dataset')
+            dataset = _convert_field_to_multilingual('odm_access_and_use_constraints',dataset)
+            dataset = _convert_field_to_multilingual('odm_accuracy',dataset)
+            dataset = _convert_field_to_multilingual('odm_contact',dataset)
+            dataset = _convert_field_to_multilingual('odm_logical_consistency',dataset)
+            dataset = _convert_field_to_multilingual('odm_completeness',dataset)
+            dataset = _convert_field_to_multilingual('odm_metadata_reference_information',dataset)
+            dataset = _convert_field_to_multilingual('odm_attributes',dataset)
 
-        if dataset['type'] == 'dataset':
-          print('type dataset')
-          dataset = _convert_field_to_multilingual('odm_access_and_use_constraints',dataset)
-          dataset = _convert_field_to_multilingual('odm_accuracy',dataset)
-          dataset = _convert_field_to_multilingual('odm_contact',dataset)
-          dataset = _convert_field_to_multilingual('odm_logical_consistency',dataset)
-          dataset = _convert_field_to_multilingual('odm_completeness',dataset)
-          dataset = _convert_field_to_multilingual('odm_metadata_reference_information',dataset)
-          dataset = _convert_field_to_multilingual('odm_attributes',dataset)
+          if dataset['type'] == 'library_record':
+            print('type library_record')
+            dataset = _convert_field_to_multilingual('odm_access_and_use_constraints',dataset)
+            dataset = _convert_field_to_multilingual('marc21_246',dataset)
+            dataset = _convert_field_to_multilingual('odm_contact',dataset)
+            dataset = _convert_field_to_multilingual('marc21_260a',dataset)
+            dataset = _convert_field_to_multilingual('marc21_260b',dataset)
+            dataset = _convert_field_to_multilingual('marc21_300',dataset)
+            dataset = _convert_field_to_multilingual('marc21_500',dataset)
 
-        if dataset['type'] == 'library_record':
-          print('type library_record')
-          dataset = _convert_field_to_multilingual('odm_access_and_use_constraints',dataset)
-          dataset = _convert_field_to_multilingual('marc21_246',dataset)
-          dataset = _convert_field_to_multilingual('odm_contact',dataset)
-          dataset = _convert_field_to_multilingual('marc21_260a',dataset)
-          dataset = _convert_field_to_multilingual('marc21_260b',dataset)
-          dataset = _convert_field_to_multilingual('marc21_300',dataset)
-          dataset = _convert_field_to_multilingual('marc21_500',dataset)
+          dataset = _convert_odm_spatial_range(dataset)
+          dataset = _convert_odm_language(dataset)
+          dataset = _copy_title(dataset)
+          dataset = _copy_notes(dataset)
 
-        dataset = _convert_odm_spatial_range(dataset)
-        dataset = _convert_odm_language(dataset)
-        dataset = _copy_title(dataset)
-        dataset = _copy_notes(dataset)
+          if config['dry'] == False:
+            dataset['odm_multilingual'] = 1
+            ckanapiutils.update_package(dataset)
+            updated_datasets.append(dataset['id'])
 
-        if config['dry'] == False:
-          dataset['odm_multilingual'] = 1
-          ckanapiutils.update_package(dataset)
-          updated_datasets.append(dataset['id'])
+        except UnicodeDecodeError:
+          traceback.print_exc()
+        except ckan.logic.ValidationError:
+          traceback.print_exc()
 
-      except UnicodeDecodeError:
-        traceback.print_exc()
-      except ckan.logic.ValidationError:
-        traceback.print_exc()
+      else:
+
+        print("skipping dataset " + dataset_id)
 
     return updated_datasets
