@@ -242,14 +242,10 @@ class S6_migrate_to_multilingual(object):
 
   @classmethod
   def run(self):
-
     print("S6_migrate_to_multilingual run")
-    # True == 1
-    # False == 0
+
     updated_datasets = []
-
     all_dataset_ids = _get_all_dataset_ids()
-
     for dataset_id in all_dataset_ids:
       dataset = ckanapiutils.get_package_contents(dataset_id)
       if 'odm_multilingual' not in dataset or ('odm_multilingual' in dataset and dataset['odm_multilingual'] == 0):
@@ -257,7 +253,7 @@ class S6_migrate_to_multilingual(object):
 
         try:
 
-          if dataset['type'] == 'dataset':
+          if 'type' in dataset['type'] == 'dataset':
             print('type dataset')
             dataset = _convert_field_to_multilingual('odm_access_and_use_constraints',dataset)
             dataset = _convert_field_to_multilingual('odm_accuracy',dataset)
@@ -291,9 +287,10 @@ class S6_migrate_to_multilingual(object):
           traceback.print_exc()
         except ckan.logic.ValidationError:
           traceback.print_exc()
-
+        except:
+          traceback.print_exc()
+          
       else:
-
         print("skipping dataset " + dataset_id)
 
     return updated_datasets
