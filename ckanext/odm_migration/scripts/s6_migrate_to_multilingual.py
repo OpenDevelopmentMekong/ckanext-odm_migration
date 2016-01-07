@@ -130,6 +130,7 @@ class S6_migrate_to_multilingual(object):
 
     for dataset_id in all_dataset_ids:
       dataset = ckanapiutils.get_package_contents(dataset_id)
+      print('Converting '+ dataset['id'])
 
       if dataset['type'] == 'dataset':
         print('type dataset')
