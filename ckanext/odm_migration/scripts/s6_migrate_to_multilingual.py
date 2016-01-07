@@ -47,6 +47,9 @@ def _copy_notes(dataset):
 
   value = dataset['notes']
 
+  if not value:
+    return dataset
+
   if isinstance(value, basestring):
     value = value.encode('utf-8')
 
@@ -77,6 +80,9 @@ def _copy_title(dataset):
     return dataset
 
   value = dataset['title']
+
+  if not value:
+    return dataset
 
   if isinstance(value, basestring):
     value = value.encode('utf-8')
