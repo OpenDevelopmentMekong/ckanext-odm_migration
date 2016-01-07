@@ -39,7 +39,8 @@ def _get_all_dataset_ids():
 
 def _is_english(value):
   for c in set(['a', 'e', 'i', 'o', 'u']):
-      if c in str: return True;
+      if c in value:
+        return True;
   return False;
 
 
@@ -289,7 +290,7 @@ class S6_migrate_to_multilingual(object):
           traceback.print_exc()
         except:
           traceback.print_exc()
-          
+
       else:
         print("skipping dataset " + dataset_id)
 
