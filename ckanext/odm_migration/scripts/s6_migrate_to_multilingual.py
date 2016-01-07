@@ -70,7 +70,6 @@ def _copy_notes(dataset):
 
   lang = 'km'
   if _is_english(value):
-    print('_is_english' + str(value))
     lang = 'en'
 
   notes_dict[lang] = value
@@ -104,7 +103,6 @@ def _copy_title(dataset):
 
   lang = 'km'
   if _is_english(value):
-    print('is english ' + str(value))
     lang = 'en'
 
   title_dict[lang] = value
