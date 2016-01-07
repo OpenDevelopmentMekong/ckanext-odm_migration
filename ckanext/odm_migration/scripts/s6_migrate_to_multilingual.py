@@ -10,7 +10,6 @@ import os
 import ckanapi
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), 'utils')))
 import ckanapi_utils
-import traceback
 import json
 import ckan.model as model
 import traceback
@@ -29,7 +28,7 @@ def _get_all_dataset_ids():
   return res_pkgs
 
 def _is_khmer(value):
-  print("checking if value is in khmer" + value)
+  print("checking if value is in khmer " + value)
   try:
     value.decode('ascii')
   except UnicodeDecodeError:
@@ -95,7 +94,7 @@ def _convert_field_to_multilingual(field,dataset):
     value = dataset[field]
 
     if type(value) is dict:
-      print(str(field) + ' is already multilingual ' + str(value))
+      print(str(field) + " is already multilingual ")
       return dataset
 
     field_dict = {
@@ -228,30 +227,35 @@ class S6_migrate_to_multilingual(object):
       dataset = ckanapiutils.get_package_contents(dataset_id)
       print('Converting '+ dataset_id)
 
-      if dataset['type'] == 'dataset':
-        print('type dataset')
-        dataset = _convert_field_to_multilingual('odm_access_and_use_constraints',dataset)
-        dataset = _convert_field_to_multilingual('odm_accuracy',dataset)
-        dataset = _convert_field_to_multilingual('odm_contact',dataset)
-        dataset = _convert_field_to_multilingual('odm_logical_consistency',dataset)
-        dataset = _convert_field_to_multilingual('odm_completeness',dataset)
-        dataset = _convert_field_to_multilingual('odm_metadata_reference_information',dataset)
-        dataset = _convert_field_to_multilingual('odm_attributes',dataset)
+      try:
 
-      if dataset['type'] == 'library_record':
-        print('type library_record')
-        dataset = _convert_field_to_multilingual('odm_access_and_use_constraints',dataset)
-        dataset = _convert_field_to_multilingual('marc21_246',dataset)
-        dataset = _convert_field_to_multilingual('odm_contact',dataset)
-        dataset = _convert_field_to_multilingual('marc21_260a',dataset)
-        dataset = _convert_field_to_multilingual('marc21_260b',dataset)
-        dataset = _convert_field_to_multilingual('marc21_300',dataset)
-        dataset = _convert_field_to_multilingual('marc21_500',dataset)
+        if dataset['type'] == 'dataset':
+          print('type dataset')
+          dataset = _convert_field_to_multilingual('odm_access_and_use_constraints',dataset)
+          dataset = _convert_field_to_multilingual('odm_accuracy',dataset)
+          dataset = _convert_field_to_multilingual('odm_contact',dataset)
+          dataset = _convert_field_to_multilingual('odm_logical_consistency',dataset)
+          dataset = _convert_field_to_multilingual('odm_completeness',dataset)
+          dataset = _convert_field_to_multilingual('odm_metadata_reference_information',dataset)
+          dataset = _convert_field_to_multilingual('odm_attributes',dataset)
 
-      dataset = _convert_odm_spatial_range(dataset)
-      dataset = _convert_odm_language(dataset)
-      dataset = _copy_title(dataset)
-      dataset = _copy_notes(dataset)
+        if dataset['type'] == 'library_record':
+          print('type library_record')
+          dataset = _convert_field_to_multilingual('odm_access_and_use_constraints',dataset)
+          dataset = _convert_field_to_multilingual('marc21_246',dataset)
+          dataset = _convert_field_to_multilingual('odm_contact',dataset)
+          dataset = _convert_field_to_multilingual('marc21_260a',dataset)
+          dataset = _convert_field_to_multilingual('marc21_260b',dataset)
+          dataset = _convert_field_to_multilingual('marc21_300',dataset)
+          dataset = _convert_field_to_multilingual('marc21_500',dataset)
+
+        dataset = _convert_odm_spatial_range(dataset)
+        dataset = _convert_odm_language(dataset)
+        dataset = _copy_title(dataset)
+        dataset = _copy_notes(dataset)
+
+      except UnicodeDecodeError:
+        traceback.print_exc()
 
       if config['dry'] == False:
         dataset['odm_multilingual'] = 1
