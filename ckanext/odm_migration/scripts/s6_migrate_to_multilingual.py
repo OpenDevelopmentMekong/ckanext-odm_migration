@@ -281,5 +281,7 @@ class S6_migrate_to_multilingual(object):
 
       except UnicodeDecodeError:
         traceback.print_exc()
+      except ckan.logic.ValidationError:
+        traceback.print_exc()
 
     return updated_datasets
