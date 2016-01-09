@@ -11,6 +11,7 @@ https://github.com/OpenDevelopmentMekong/odm-migration
 import sys
 import os
 import io
+import ckan
 import ckanapi
 import lxml
 import json
@@ -355,7 +356,10 @@ class S4_import_odc_laws(object):
                           print("Dataset created ", dataset_metadata['id'], dataset_metadata['title'])
 
                       except TypeError as e:
+                        if (config['debug']):
+                          print(e)
 
+                      except ckan.logic.ValidationError as e:
                         if (config['debug']):
                           print(e)
 
