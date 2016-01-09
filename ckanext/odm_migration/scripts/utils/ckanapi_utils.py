@@ -411,7 +411,7 @@ class LocalCkanApi (ICkanApi):
     userobj = context.userobj
     ckan_auth = userobj.apikey
 
-    return requests.post(ckan_url + 'api/3/action/resource_create',data=params,headers={"X-CKAN-API-Key": ckan_auth},files=[('upload', file(params["upload"]))])
+    return requests.post(ckan_url + 'api/3/action/resource_create',data=params,headers={"X-CKAN-API-Key": ckan_auth},files=[('upload', file(params["upload"]))],verify=False)
 
   def create_tag(self,params):
 
