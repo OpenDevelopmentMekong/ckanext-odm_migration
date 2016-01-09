@@ -138,7 +138,7 @@ def _add_extras_urls_as_resources(dataset_metadata, field_prefixes, ckanapi_util
                       existing_resource = True
 
                   if existing_resource == False:
-                    temp_file_path = script_utils._generate_temp_filename(script_utils._get_ext(field_value))
+                    temp_file_path = script_utils._generate_temp_filename('/tmp/',script_utils._get_ext(field_value))
                     script_utils._download_file(field_value, temp_file_path)
                     resource_dict = script_utils._create_metadata_dictionary_for_upload(dataset_metadata['id'],'',temp_file_path, dataset_metadata['title_translated'][lang], field_prefix['lang'].upper(), script_utils._get_ext(field_value),field_prefix['lang'])
                     created_resource = ckanapiutils.create_resource_with_file_upload(resource_dict)
@@ -251,7 +251,7 @@ class S4_import_odc_laws(object):
     # Extending common config
     config['dry'] = False
     config['skip_n_datasets'] = 0
-    config['debug'] = False
+    config['debug'] = True
     config['importer_name'] = 'OD Mekong Importer'
     config['importer_email'] = 'info@opendevmekong.net'
     config['skip_existing'] = False

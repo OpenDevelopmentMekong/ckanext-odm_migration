@@ -111,8 +111,8 @@ def _str_capitalize_underscore_replaced_with_space( string):
   string = string.replace("_", " ")
   return string.capitalize()
 
-def _generate_temp_filename(ext):
-  return str(uuid.uuid4()) + "." + str(ext)
+def _generate_temp_filename(dir,ext):
+  return dir + str(uuid.uuid4()) + "." + str(ext)
 
 def _create_metadata_dictionary_for_upload(dataset_id,url,path,name,description,format,lang):
 
