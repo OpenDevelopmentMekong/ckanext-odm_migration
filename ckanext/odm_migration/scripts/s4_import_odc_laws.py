@@ -105,7 +105,7 @@ def _set_odm_spatial_range(existing_metadata, metadata):
 
   return metadata
 
-def _add_extras_urls_as_resources(dataset_metadata, field_prefixes, ckanapi_utils,elem,root):
+def _add_extras_urls_as_resources(dataset_metadata, field_prefixes, ckanapi_utils,elem,root,lang):
 
   for meta in elem.findall('wp:postmeta', root.nsmap):
     meta_key = meta.find('wp:meta_key', root.nsmap).text
@@ -134,13 +134,13 @@ def _add_extras_urls_as_resources(dataset_metadata, field_prefixes, ckanapi_util
 
                   existing_resource = False
                   for resource in dataset_metadata['resources']:
-                    if resource['name'] == dataset_metadata['title']:
+                    if resource['name'] == dataset_metadata['title_translated'][lang]:
                       existing_resource = True
 
                   if existing_resource == False:
                     temp_file_path = script_utils._generate_temp_filename(script_utils._get_ext(field_value))
                     script_utils._download_file(field_value, temp_file_path)
-                    resource_dict = script_utils._create_metadata_dictionary_for_upload(dataset_metadata['id'], '',temp_file_path, dataset_metadata['title'], field_prefix['lang'].upper(), script_utils._get_ext(field_value),field_prefix['lang'])
+                    resource_dict = script_utils._create_metadata_dictionary_for_upload(dataset_metadata['id'],'',temp_file_path, dataset_metadata['title_translated'][lang], field_prefix['lang'].upper(), script_utils._get_ext(field_value),field_prefix['lang'])
                     created_resource = ckanapiutils.create_resource_with_file_upload(resource_dict)
 
                     if os.path.exists(temp_file_path):
@@ -364,7 +364,7 @@ class S4_import_odc_laws(object):
                           print(e)
 
                     if 'id' in dataset_metadata:
-                      _add_extras_urls_as_resources(dataset_metadata, config['field_prefixes'][lang], ckanapiutils, elem, root)
+                      _add_extras_urls_as_resources(dataset_metadata, config['field_prefixes'][lang], ckanapiutils, elem, root, lang)
 
                 elem.clear()
 
