@@ -22,6 +22,7 @@ config = dict()
 def _get_all_dataset_ids():
 
   s = """SELECT p.id as id FROM package p
+         ORDER BY p.metadata_modified ASC
       """
 
   res_ids = model.Session.execute(s).fetchall()
@@ -247,49 +248,49 @@ class S6_migrate_to_multilingual(object):
     all_dataset_ids = _get_all_dataset_ids()
     for dataset_id in all_dataset_ids:
       dataset = ckanapiutils.get_package_contents(dataset_id)
-      if 'odm_multilingual' not in dataset or ('odm_multilingual' in dataset and dataset['odm_multilingual'] == 0):
-        print('Converting '+ dataset_id)
 
-        try:
+      try:
 
-          if 'type' in dataset['type'] == 'dataset':
-            print('type dataset')
-            dataset = _convert_field_to_multilingual('odm_access_and_use_constraints',dataset)
-            dataset = _convert_field_to_multilingual('odm_accuracy',dataset)
-            dataset = _convert_field_to_multilingual('odm_contact',dataset)
-            dataset = _convert_field_to_multilingual('odm_logical_consistency',dataset)
-            dataset = _convert_field_to_multilingual('odm_completeness',dataset)
-            dataset = _convert_field_to_multilingual('odm_metadata_reference_information',dataset)
-            dataset = _convert_field_to_multilingual('odm_attributes',dataset)
+        if 'title_translated' in dataset or dataset['type'] == 'laws_record':
+          raise ValueError('DATASET DOES NOT NEED TO BE MIGRATED')
 
-          if dataset['type'] == 'library_record':
-            print('type library_record')
-            dataset = _convert_field_to_multilingual('odm_access_and_use_constraints',dataset)
-            dataset = _convert_field_to_multilingual('marc21_246',dataset)
-            dataset = _convert_field_to_multilingual('odm_contact',dataset)
-            dataset = _convert_field_to_multilingual('marc21_260a',dataset)
-            dataset = _convert_field_to_multilingual('marc21_260b',dataset)
-            dataset = _convert_field_to_multilingual('marc21_300',dataset)
-            dataset = _convert_field_to_multilingual('marc21_500',dataset)
+        print('Processing dataset ' + dataset_id)
 
-          dataset = _convert_odm_spatial_range(dataset)
-          dataset = _convert_odm_language(dataset)
-          dataset = _copy_title(dataset)
-          dataset = _copy_notes(dataset)
+        if 'type' in dataset['type'] == 'dataset':
+          print('type dataset')
+          dataset = _convert_field_to_multilingual('odm_access_and_use_constraints',dataset)
+          dataset = _convert_field_to_multilingual('odm_accuracy',dataset)
+          dataset = _convert_field_to_multilingual('odm_contact',dataset)
+          dataset = _convert_field_to_multilingual('odm_logical_consistency',dataset)
+          dataset = _convert_field_to_multilingual('odm_completeness',dataset)
+          dataset = _convert_field_to_multilingual('odm_metadata_reference_information',dataset)
+          dataset = _convert_field_to_multilingual('odm_attributes',dataset)
 
-          if config['dry'] == False:
-            dataset['odm_multilingual'] = 1
-            ckanapiutils.update_package(dataset)
-            updated_datasets.append(dataset['id'])
+        if dataset['type'] == 'library_record':
+          print('type library_record')
+          dataset = _convert_field_to_multilingual('odm_access_and_use_constraints',dataset)
+          dataset = _convert_field_to_multilingual('marc21_246',dataset)
+          dataset = _convert_field_to_multilingual('odm_contact',dataset)
+          dataset = _convert_field_to_multilingual('marc21_260a',dataset)
+          dataset = _convert_field_to_multilingual('marc21_260b',dataset)
+          dataset = _convert_field_to_multilingual('marc21_300',dataset)
+          dataset = _convert_field_to_multilingual('marc21_500',dataset)
 
-        except UnicodeDecodeError:
-          traceback.print_exc()
-        except ckan.logic.ValidationError:
-          traceback.print_exc()
-        except:
-          traceback.print_exc()
+        dataset = _convert_odm_spatial_range(dataset)
+        dataset = _convert_odm_language(dataset)
+        dataset = _copy_title(dataset)
+        dataset = _copy_notes(dataset)
 
-      else:
+        if config['dry'] == False:
+          dataset['odm_multilingual'] = 1
+          ckanapiutils.update_package(dataset)
+          updated_datasets.append(dataset['id'])
+
+      except UnicodeDecodeError:
+        traceback.print_exc()
+      except ckan.logic.ValidationError:
+        traceback.print_exc()
+      except:
         print("skipping dataset " + dataset_id)
 
     return updated_datasets
