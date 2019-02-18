@@ -4,7 +4,7 @@
 '''
 import ckanapi
 import requests
-from pylons import config as ckan_config
+from ckan.common import config as ckan_config
 import ckan.lib.base as base
 context = base.c
 
