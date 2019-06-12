@@ -27,14 +27,7 @@ class MigrationController(BaseController):
       if not user_is_sysadmin:
         abort(401, _('Unauthorized to access migration scripts'))
 
-      if ('insert_initial_odm_data' in request.params):
-
-        script = s1_insert_initial_odm_data.S1_insert_intial_odm_data()
-        c.script_results = script.run()
-
-        return p.toolkit.render('ckanext/migration/result.html')
-
-      elif ('import_taxonomy_tag_dictionaries' in request.params):
+      if ('import_taxonomy_tag_dictionaries' in request.params):
 
         script = s2_import_taxonomy_tag_dictionaries.S2_import_taxonomy_tag_dictionaries()
         c.script_results = script.run()
@@ -48,33 +41,6 @@ class MigrationController(BaseController):
 
         return p.toolkit.render('ckanext/migration/result.html')
 
-      elif ('import_odc_laws' in request.params):
-
-        script = s4_import_odc_laws.S4_import_odc_laws()
-        c.script_results = script.run()
-
-        return p.toolkit.render('ckanext/migration/result.html')
-
-      elif ('delete_all_laws' in request.params):
-
-        script = s5_delete_all_laws.S5_delete_all_laws()
-        c.script_results = script.run()
-
-        return p.toolkit.render('ckanext/migration/result.html')
-
-      elif ('migrate_to_multilingual' in request.params):
-
-        script = s6_migrate_to_multilingual.S6_migrate_to_multilingual()
-        c.script_results = script.run()
-
-        return p.toolkit.render('ckanext/migration/result.html')
-
-      elif ('reset_multilingual_flag' in request.params):
-
-        script = s7_reset_multilingual_flag.S7_reset_multilingual_flag()
-        c.script_results = script.run()
-
-        return p.toolkit.render('ckanext/migration/result.html')
 
       else:
 

@@ -6,15 +6,6 @@
 
 {% block primary_content_inner %}
 
-  <form method="POST" id="s1_insert_initial_odm_data">
-    <button
-      type="submit"
-      name="insert_initial_odm_data"
-      value="insert_initial_odm_data"
-      class="btn btn-info">
-      {% trans %}Insert initial data{% endtrans %}
-    </button>
-  </form>
 
   <form method="POST" id="s2_import_taxonomy_tag_dictionaries">
     <button
@@ -36,45 +27,6 @@
     </button>
   </form>
 
-  <form method="POST" id="s4_import_odc_laws">
-    <button
-      type="submit"
-      name="import_odc_laws"
-      value="import_odc_laws"
-      class="btn btn-info">
-      {% trans %}Import odc laws{% endtrans %}
-    </button>
-  </form>
-
-  <form method="POST" id="s5_delete_all_laws">
-    <button
-      type="submit"
-      name="delete_all_laws"
-      value="delete_all_laws"
-      class="btn btn-danger">
-      {% trans %}DANGER! Delete all laws{% endtrans %}
-    </button>
-  </form>
-
-  <form method="POST" id="s6_migrate_to_multilingual">
-    <button
-      type="submit"
-      name="migrate_to_multilingual"
-      value="migrate_to_multilingual"
-      class="btn btn-danger">
-      {% trans %}DANGER! Migrate to multilingual{% endtrans %}
-    </button>
-  </form>
-
-  <form method="POST" id="s7_reset_multilingual_flag">
-    <button
-      type="submit"
-      name="reset_multilingual_flag"
-      value="reset_multilingual_flag"
-      class="btn btn-danger">
-      {% trans %}DANGER! Reset multilingual flag{% endtrans %}
-    </button>
-  </form>
 
 {% endblock %}
 
