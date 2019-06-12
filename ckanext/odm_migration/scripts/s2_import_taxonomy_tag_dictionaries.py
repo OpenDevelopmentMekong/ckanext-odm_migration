@@ -7,14 +7,11 @@ Pulls the taxonomy from https://github.com/OpenDevelopmentMekong/odm-localizatio
 as tag dictionaries.
 '''
 
-import sys
-import os
 import ckanapi
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), 'utils')))
-import geoserver_utils
-import ckanapi_utils
-import taxonomy_utils
-import script_utils
+
+from utils import ckanapi_utils
+from utils import taxonomy_utils
+from utils import script_utils
 
 ckanapiutils = ckanapi_utils.LocalCkanApi()
 taxonomyutils = taxonomy_utils.RealTaxonomyApi()

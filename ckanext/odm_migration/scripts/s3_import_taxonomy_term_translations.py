@@ -7,14 +7,9 @@ This script imports multi-lingual taxonomy from https://github.com/OpenDevelopme
 and stores term translations.
 '''
 
-import sys
-import os
-import urllib2
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), 'utils')))
-import ckanapi_utils
-import github_utils
-import taxonomy_utils
-import script_utils
+from utils import ckanapi_utils
+from utils import taxonomy_utils
+from utils import script_utils
 
 ckanapiutils = ckanapi_utils.LocalCkanApi()
 taxonomyutils = taxonomy_utils.RealTaxonomyApi()
@@ -27,7 +22,7 @@ class S3_import_taxonomy_term_translations(object):
   def __init__(self):
     print("S3_import_taxonomy_term_translations init")
 
-    config['supported_langs']=['en','km','th','vi']
+    config['supported_langs']=['en','km','th','vi','lo']
 
     return
 
@@ -55,10 +50,9 @@ class S3_import_taxonomy_term_translations(object):
         translation_dict = taxonomyutils.get_taxonomy_for_locale(locale)
 
         # Call utility function
-        script_utils._inspect_json_dict_fill_list(translation_dict,term_lists[locale])
+        script_utils._inspect_json_dict_fill_list(translation_dict, term_lists[locale])
 
-      except (urllib2.HTTPError) as e:
-
+      except Exception as e:
         if config.DEBUG:
           print("File for locale " + locale +" not found. Check your config and make sure that the file is available on the odm-localization repository.")
 
@@ -66,18 +60,15 @@ class S3_import_taxonomy_term_translations(object):
     for locale_origin in locales:
 
       # Set counter
-      term_position = 0
       other_locales = list(locales)
       other_locales.remove(locale_origin)
 
       # Now loop through the terms of the particular locale
-      for term in term_lists[locale_origin]:
+      for term_position, term in enumerate(term_lists[locale_origin]):
 
         # For each term, we add a term translation of each of the other languages
         for locale_destination in other_locales:
-
           try:
-
             orig_term = term_lists[locale_origin][term_position]
             dest_term = term_lists[locale_destination][term_position]
 
@@ -96,10 +87,7 @@ class S3_import_taxonomy_term_translations(object):
               print('Translating ' + params2['term'].encode("utf-8") + ' ('+ locale_destination + ') as ' + params2['term_translation'].encode("utf-8") + ' (' +  locale_origin + ')')
 
           except IndexError:
-
             break
-
-        term_position = term_position + 1
 
     count = 0
     if len(terms_to_import) > 0:
