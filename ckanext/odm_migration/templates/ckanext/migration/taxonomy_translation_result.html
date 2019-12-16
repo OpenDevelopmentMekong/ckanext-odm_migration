@@ -1,0 +1,48 @@
+{% extends "page.html" %}
+
+{% block breadcrumb_content %}
+  <li class="active">{{ 'Migration stats' }}</li>
+{% endblock %}
+
+{% block primary_content_inner %}
+
+  <h2>{{ _('Results') }}</h2>
+  <div class="container">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Field</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Job Id</td>
+        <td>{{ c.script_results.job_id  }}</td>
+      </tr>
+      <tr>
+        <td>Message</td>
+        <td>{{ c.script_results.message }}</td>
+      </tr>
+      <tr>
+        <td>Given Timeout in sec</td>
+        <td>{{ c.script_results.timeout }}</td>
+      </tr>
+    </tbody>
+   </table>
+   </div>
+
+{% endblock %}
+
+{% block secondary_content %}
+  <div class="module module-narrow module-shallow">
+    <h2 class="module-heading">
+      <i class="icon-info-sign"></i>
+      {{ _('Migration scripts') }}
+    </h2>
+    <div class="module-content">
+      {% trans %}<p>Admin stuff</p>{% endtrans %}
+      {{ h.link_to("Back", h.url_for(controller='ckanext.odm_migration.controller:MigrationController', action='run')) }}
+    </div>
+  </div>
+{% endblock %}

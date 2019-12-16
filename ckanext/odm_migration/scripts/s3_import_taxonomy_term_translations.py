@@ -10,7 +10,7 @@ and stores term translations.
 from utils import ckanapi_utils
 from utils import taxonomy_utils
 from utils import script_utils
-
+from ckan.lib import jobs
 ckanapiutils = ckanapi_utils.LocalCkanApi()
 taxonomyutils = taxonomy_utils.RealTaxonomyApi()
 
@@ -18,15 +18,11 @@ config = dict()
 
 class S3_import_taxonomy_term_translations(object):
 
-  @classmethod
+  config = dict()
+
   def __init__(self):
-    print("S3_import_taxonomy_term_translations init")
+    self.supported_langs=['en','km','th','vi','lo', 'my']
 
-    config['supported_langs']=['en','km','th','vi','lo']
-
-    return
-
-  @classmethod
   def run(self):
 
     print("S3_import_taxonomy_term_translations run")
@@ -34,7 +30,7 @@ class S3_import_taxonomy_term_translations(object):
     added_term_translations = []
 
     # Obtain JSON File from Github containing the different translations
-    locales = config['supported_langs']
+    locales = self.supported_langs
     term_lists = {}
     terms_to_import = []
 
@@ -95,3 +91,10 @@ class S3_import_taxonomy_term_translations(object):
       count = result["success"]
 
     return "COMPLETED import_taxonomy_term_translations " + str(count) + " terms imported successfully."
+
+def translate(timeout=180):
+    script = S3_import_taxonomy_term_translations()
+    job = jobs.enqueue(script.run, args=[], timeout=timeout)
+    job_id = job.id
+    message = "Job has been assigned!!"
+    return {'job_id':job_id, 'message':message, 'timeout':timeout}

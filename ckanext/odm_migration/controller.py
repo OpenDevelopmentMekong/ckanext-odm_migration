@@ -6,7 +6,7 @@ from ckan.lib.base import BaseController, config
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), 'scripts')))
 import s1_insert_initial_odm_data
 import s2_import_taxonomy_tag_dictionaries
-import s3_import_taxonomy_term_translations
+from ckanext.odm_migration.scripts import s3_import_taxonomy_term_translations
 import s4_import_odc_laws
 import s5_delete_all_laws
 import s6_migrate_to_multilingual
@@ -28,19 +28,15 @@ class MigrationController(BaseController):
         abort(401, _('Unauthorized to access migration scripts'))
 
       if ('import_taxonomy_tag_dictionaries' in request.params):
-
+        
         script = s2_import_taxonomy_tag_dictionaries.S2_import_taxonomy_tag_dictionaries()
         c.script_results = script.run()
 
         return p.toolkit.render('ckanext/migration/result.html')
 
       elif ('import_taxonomy_term_translations' in request.params):
-
-        script = s3_import_taxonomy_term_translations.S3_import_taxonomy_term_translations()
-        c.script_results = script.run()
-
-        return p.toolkit.render('ckanext/migration/result.html')
-
+        c.script_results = s3_import_taxonomy_term_translations.translate(timeout=7200)
+        return p.toolkit.render('ckanext/migration/taxonomy_translation_result.html')
 
       else:
 
